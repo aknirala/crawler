@@ -1,29 +1,38 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
+import sys
 from bs4 import BeautifulSoup
-# from IPython.display import Image
-import urllib
+if sys.version_info[0] == 2:
+    import urllib
+else:
+    import urllib.request
+import logging
+from collections import defaultdict
 
-url="http://www.moneycontrol.com/stocks/company_info/stock_news.php?sc_id=AT&scat=&pageno=1&next=0&durationType=Y&Year=2015"
+url = "http://www.moneycontrol.com/stocks/company_info/stock_news.php?\
+sc_id=AT&scat=&pageno=1&next=0&durationType=Y&Year=2015"
 
-
-
-doc = urllib.urlopen(url)
+if sys.version_info[0] == 2:
+    doc = urllib.urlopen(url)
+else:
+    doc = urllib.request.urlopen(url)
 
 docContent = BeautifulSoup(doc, "html.parser")
 
-for link in docContent.find_all("a"):
+articles = []
+for element in docContent.find_all("div"):
     try:
-        if link.attrs['class'] == [u'g_14bl']:
-            #print link.get("href")
-            pass
+        if element.attrs['style'] == "width:550px":
+            article = defaultdict(str)
+            article_link = "moneycontrol.com" + element.a['href']
+            for p in element.find_all('p'):
+                if 'a_10dgry' in p.attrs['class']:
+                    article_time = p.contents[0].split('|')[0]
+                    article_date = p.contents[0].split('|')[1][:-1]
+            article['link'] = article_link
+            article['time'] = article_time
+            article['date'] = article_date
+            articles.append(article)
     except:
-        pass
-
-for paragraph in docContent.find_all("p"):
-    try:
-        if paragraph.attrs['class'] == ["PT3", "a_10dgry"]:
-            print paragraph.contents[0].split('|')[0]
-            print paragraph.contents[0].split('|')[1][:-1]
-    except:
-        pass
-#print docContent
+        logging.debug("div has no width attribute")
