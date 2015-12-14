@@ -49,8 +49,7 @@ for element in docContent.find_all("div"):
             else:
                 article_doc = urllib.request.urlopen(url)
             article['title'] = BeautifulSoup(extractor.getHTML(),
-                                             "html.parser").find_all(
-                                                 "h1")[0].contents[0]
+                                             "html.parser").find_all("h1")[0].contents[0]
             articles.append(article)
     except:
         logging.debug("div has no width attribute")
