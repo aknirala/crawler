@@ -1,10 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import json
 import logging
 import os
-import urllib
+import urllib.request
 from collections import defaultdict
 
 from boilerpipe.extract import Extractor
@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 
 
 def get_articles(url):
-    doc = urllib.urlopen(url)
+    doc = urllib.request.urlopen(url)
     docContent = BeautifulSoup(doc, 'html.parser')
     articles = []
     for element in docContent.find_all('div'):
@@ -52,14 +52,14 @@ def main():
     year_range = ['2015', '2014']
     pages = range(1, 10)
 
-    for sc_id, name in sc_ids.iteritems():
+    for sc_id, name in sc_ids.items():
         articles = []
         for year in year_range:
             for page in pages:
                 param = '&'.join(['{}={}'.format(a, b)
                                   for a, b in zip(param_list, [sc_id, page, 'Y', year])])
                 url = main_url + param
-                print url
+                print(url)
                 articles.append(get_articles(url))
         if articles:
             filename = os.path.join('data', ''.join([name, '.json']))

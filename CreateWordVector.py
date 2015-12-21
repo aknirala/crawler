@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import json
@@ -18,7 +18,7 @@ def main():
             json_data = json.load(json_file)
             for article_year in json_data:
                 for article in article_year:
-                    print article['date']
+                    print(article['date'])
                     break
 
 main()
