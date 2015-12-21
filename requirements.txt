@@ -1,0 +1,5 @@
+beautifulsoup4==4.4.1
+boilerpipe-py3==1.2.0.0
+charade==1.0.3
+JPype1-py3==0.5.5.2
+wheel==0.24.0
